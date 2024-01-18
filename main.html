@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    <div class="card">
+        <div class="search">
+            <input type="text" placeholder="Enter city name" spellcheck="false">
+            <button class="search-button">Search</button>
+        </div>
+        <div class="weather">
+            <img class="weather-icon" src="rain.png" alt="">
+            <h1 class="temp">22°c</h1>
+            <h2 class="city">New York</h2>
+            <div class="details">
+                <div class="col">
+                    <img class="humidity" src="humidity.png" alt="">
+                    <p class="humidity-val">50%</p>
+                    <p>Humidity</p>
+                </div>
+                <div class="col">
+                    <img class="wind" src="wind.png" alt="">
+                    <p class="wind-val">15 Km/hr</p>
+                    <p>Wind</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        const apikey = "9de24c92ffeb2de0173a2d18dd539cea";
+        const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+        const weatherIcon = document.querySelector(".weather-icon");
+
+        
+const searchBox = document.querySelector(".search input");
+const searchbutton = document.querySelector(".search button");
+
+async function checkWeather(city){
+    const responce = await fetch(apiUrl + city +`&appid=${apikey}`);
+    var data = await responce.json();
+
+    console.log(data);
+
+    document.querySelector(".city").innerHTML = data.name;
+    document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°c";
+    document.querySelector(".humidity-val").innerHTML = data.main.humidity + "%";
+    document.querySelector(".wind-val").innerHTML = data.wind.speed + "Km/hr";
+
+if (data.weather[0].main == "Clouds") {
+    weatherIcon.src = "/Weather app.html/clouds.png";
+}
+
+else if(data.weather[0].main == "Clear") {
+    weatherIcon.src = "/Weather app.html/sun.png";
+}
+document.querySelector(".weather").style.display = "block";
+
+
+}
+
+
+
+
+searchbutton.addEventListener("click",()=>{
+    checkWeather(searchBox.value);
+})
+
+
+    </script>
+</body>
+</html>
